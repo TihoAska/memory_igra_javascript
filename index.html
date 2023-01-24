@@ -33,19 +33,13 @@
         <div class="row"></div>
       </div>
     </div>
-    
   </body>
 
   <script>
     var kocke = document.querySelectorAll(".row");
-    
+
     let numbers = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8];
-    let clicked = [
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
-    ]
+    let clicked = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     let memo = [[], [], [], []]; //ovdje ce se spremati brojevi
     let k = 0; //brojat ce do 16 u petlji jer ima 16 brojeva
 
@@ -58,14 +52,15 @@
     jednaki = 0;
     firstIndex = -1;
     secondIndex = -2;
-    clicked1 = -1;
-    clicked2 = -1;
+    clickedIndex1 = -1;
+    clickedIndex2 = -1;
 
     //broji koliko puta si kliknio
     click = 0;
     points = 0;
 
-    var pointz = document.getElementById("points").innerHTML = "Points: " + points;
+    var pointz = (document.getElementById("points").innerHTML =
+      "Points: " + points);
 
     //nasao na netu neku funkciju koja random poslozi brojeve
     function shuffle(numbers) {
@@ -85,6 +80,9 @@
       kocke[i].addEventListener("click", function () {
         kocke[i].innerHTML = memo[Math.floor(i / 4)][i % 4];
 
+        clickedIndex1 = -1;
+        clickedIndex2 = -2;
+
         //ako brojevi nisu jednaki ne ostavlja ih otkrivene nego ih skriva
         if (jednaki == -1) {
           kocke[firstIndex].innerHTML = " ";
@@ -98,15 +96,20 @@
         //ako petlja vrti kada je flag paran broj ucitava prvi broj, ako vrti kada je flag neparan ucitava drugi i tako se izmjenjuje ucitavanje, svaki put je flag++
         if (flag % 2 == 0) {
           firstIndex = i;
-          clicked1 = i;
+          clickedIndex1 = i;
           first = memo[Math.floor(i / 4)][i % 4];
         } else {
           secondIndex = i;
-          clicked2 = i;
+          clickedIndex2 = i;
           second = memo[Math.floor(i / 4)][i % 4];
         }
 
-        flag++;      
+        if ((clicked[clickedIndex1] == 1) || (clicked[clickedIndex2] == 1)) {
+          console.log("Already clicked, click something else!");
+          return;
+        }
+
+        flag++;
         click++; //povecava broj klikova
 
         //na svaki drugi klik gleda jesu li brojevi isti, ako nisu varijablu "jednak" postavlja u -1 i na pocetku brise otkrivene slike
@@ -114,7 +117,7 @@
           if (first == second) {
             console.log("Jednaki su!");
             points++;
-            
+
             clicked[firstIndex] = 1;
             clicked[secondIndex] = 1;
           } else if (first != second) {
@@ -124,7 +127,8 @@
           }
         }
 
-        var pointz = document.getElementById("points").innerHTML = "Points: " + points;
+        var pointz = (document.getElementById("points").innerHTML =
+          "Points: " + points);
       });
     }
   </script>
