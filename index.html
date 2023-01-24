@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div id="points"></div>
+
+    <div class="kocka">
+      <div class="main">
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+      </div>
+      <div class="main">
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+      </div>
+      <div class="main">
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+      </div>
+      <div class="main">
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+      </div>
+    </div>
+    
+  </body>
+
+  <script>
+    var kocke = document.querySelectorAll(".row");
+    
+    let numbers = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8];
+    let clicked = [
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]
+    let memo = [[], [], [], []]; //ovdje ce se spremati brojevi
+    let k = 0; //brojat ce do 16 u petlji jer ima 16 brojeva
+
+    //prvi i drugi broj
+    first = -1;
+    second = -2;
+
+    //flagovi
+    flag = 0;
+    jednaki = 0;
+    firstIndex = -1;
+    secondIndex = -2;
+    clicked1 = -1;
+    clicked2 = -1;
+
+    //broji koliko puta si kliknio
+    click = 0;
+    points = 0;
+
+    var pointz = document.getElementById("points").innerHTML = "Points: " + points;
+
+    //nasao na netu neku funkciju koja random poslozi brojeve
+    function shuffle(numbers) {
+      numbers.sort(() => Math.random() - 0.5);
+    }
+    shuffle(numbers);
+
+    //random poslozene brojeve sprema u 4 polja
+    for (var i = 0; i < 4; i++) {
+      for (var j = 0; j < 4; j++) {
+        memo[i][j] = numbers[k];
+        k++;
+      }
+    }
+
+    for (let i = 0; i < kocke.length; i++) {
+      kocke[i].addEventListener("click", function () {
+        kocke[i].innerHTML = memo[Math.floor(i / 4)][i % 4];
+
+        //ako brojevi nisu jednaki ne ostavlja ih otkrivene nego ih skriva
+        if (jednaki == -1) {
+          kocke[firstIndex].innerHTML = " ";
+          kocke[secondIndex].innerHTML = " ";
+          firstIndex = -1;
+          secondIndex = -1;
+        }
+
+        jednaki = 0;
+
+        //ako petlja vrti kada je flag paran broj ucitava prvi broj, ako vrti kada je flag neparan ucitava drugi i tako se izmjenjuje ucitavanje, svaki put je flag++
+        if (flag % 2 == 0) {
+          firstIndex = i;
+          clicked1 = i;
+          first = memo[Math.floor(i / 4)][i % 4];
+        } else {
+          secondIndex = i;
+          clicked2 = i;
+          second = memo[Math.floor(i / 4)][i % 4];
+        }
+
+        flag++;      
+        click++; //povecava broj klikova
+
+        //na svaki drugi klik gleda jesu li brojevi isti, ako nisu varijablu "jednak" postavlja u -1 i na pocetku brise otkrivene slike
+        if (click % 2 == 0) {
+          if (first == second) {
+            console.log("Jednaki su!");
+            points++;
+            
+            clicked[firstIndex] = 1;
+            clicked[secondIndex] = 1;
+          } else if (first != second) {
+            jednaki = -1;
+            points--;
+            console.log("Nisu jednaki");
+          }
+        }
+
+        var pointz = document.getElementById("points").innerHTML = "Points: " + points;
+      });
+    }
+  </script>
+</html>
