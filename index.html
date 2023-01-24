@@ -38,8 +38,10 @@
   <script>
     var kocke = document.querySelectorAll(".row");
 
-    let numbers = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8];
-    let clicked = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    let numbers = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8]; //brojevi s kojima se igra
+    let pogodeno = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; //kada se pogodi neka kombinacija na te indexe se sprema vrijednost 1 da se ne mogu kliknuti opet
+    // let clicked = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; //gleda kliknute indexe
+
     let memo = [[], [], [], []]; //ovdje ce se spremati brojevi
     let k = 0; //brojat ce do 16 u petlji jer ima 16 brojeva
 
@@ -52,11 +54,16 @@
     jednaki = 0;
     firstIndex = -1;
     secondIndex = -2;
-    clickedIndex1 = -1;
-    clickedIndex2 = -1;
+
+    // pogodenoIndex1 = -1;
+    // pogodenoIndex2 = -1;
+
+    // clickedIndex1 = -1;
+    // clickedIndex2 = -1;
 
     //broji koliko puta si kliknio
     click = 0;
+    //broji bodove, +1 bod za pogodeno, -1 za promaseno
     points = 0;
 
     var pointz = (document.getElementById("points").innerHTML =
@@ -80,9 +87,6 @@
       kocke[i].addEventListener("click", function () {
         kocke[i].innerHTML = memo[Math.floor(i / 4)][i % 4];
 
-        clickedIndex1 = -1;
-        clickedIndex2 = -2;
-
         //ako brojevi nisu jednaki ne ostavlja ih otkrivene nego ih skriva
         if (jednaki == -1) {
           kocke[firstIndex].innerHTML = " ";
@@ -96,30 +100,35 @@
         //ako petlja vrti kada je flag paran broj ucitava prvi broj, ako vrti kada je flag neparan ucitava drugi i tako se izmjenjuje ucitavanje, svaki put je flag++
         if (flag % 2 == 0) {
           firstIndex = i;
-          clickedIndex1 = i;
+          // clickedIndex1 = i;
+          // clicked[clickedIndex1] = 1;
           first = memo[Math.floor(i / 4)][i % 4];
         } else {
           secondIndex = i;
-          clickedIndex2 = i;
+          // clickedIndex2 = i;
+          // clicked[clickedIndex2] = 1;
           second = memo[Math.floor(i / 4)][i % 4];
         }
 
-        if ((clicked[clickedIndex1] == 1) || (clicked[clickedIndex2] == 1)) {
-          console.log("Already clicked, click something else!");
-          return;
-        }
+
+        //NE RADI
+        //provjerava jel to mjesto vec pogodeno, ako je izlazi van iz funkcije
+        // if (clicked[clickedIndex1] == 1 || clicked[clickedIndex2] == 1) {
+        //   console.log("Already clicked, click something else!");
+        //   return;
+        // }
 
         flag++;
-        click++; //povecava broj klikova
+        click++;
 
-        //na svaki drugi klik gleda jesu li brojevi isti, ako nisu varijablu "jednak" postavlja u -1 i na pocetku brise otkrivene slike
+        //na svaki drugi klik gleda jesu li brojevi isti, ako jesu stavlja 1 na te indexe da se ne mogu opet kliknuti, ako nisu postavlja varijablu u -1 i brise ih tj stavlja
+        //prazna mjesta
         if (click % 2 == 0) {
           if (first == second) {
             console.log("Jednaki su!");
             points++;
-
-            clicked[firstIndex] = 1;
-            clicked[secondIndex] = 1;
+            // pogodeno[firstIndex] = 1;
+            // pogodeno[secondIndex] = 1;
           } else if (first != second) {
             jednaki = -1;
             points--;
