@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Document</title>
+    <title>MEMORY GAME</title>
     <link rel="stylesheet" href="index.css" />
   </head>
   <body>
@@ -38,7 +38,24 @@
   <script>
     var kocke = document.querySelectorAll(".row");
 
-    let numbers = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8]; //brojevi s kojima se igra
+    let pictures = [
+      "../memoryIgricaJavascript/Slike/EricCartman.png",
+      "../memoryIgricaJavascript/Slike/EricCartman.png",
+      "../memoryIgricaJavascript/Slike/Cheems.png",
+      "../memoryIgricaJavascript/Slike/Cheems.png",
+      "../memoryIgricaJavascript/Slike/Banana.jpg",
+      "../memoryIgricaJavascript/Slike/Banana.jpg",
+      "../memoryIgricaJavascript/Slike/ConfusedCat.jpg",
+      "../memoryIgricaJavascript/Slike/ConfusedCat.jpg",
+      "../memoryIgricaJavascript/Slike/EvilKermit.jpg",
+      "../memoryIgricaJavascript/Slike/EvilKermit.jpg",
+      "../memoryIgricaJavascript/Slike/IceCream.png",
+      "../memoryIgricaJavascript/Slike/IceCream.png",
+      "../memoryIgricaJavascript/Slike/NerdEmoji.png",
+      "../memoryIgricaJavascript/Slike/NerdEmoji.png",
+      "../memoryIgricaJavascript/Slike/USSRdog.jpg",
+      "../memoryIgricaJavascript/Slike/USSRdog.jpg",
+    ]; //slike s kojima se igra
     let pogodeno = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; //kada se pogodi neka kombinacija na te indexe se sprema vrijednost 1 da se ne mogu kliknuti opet
     // let clicked = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; //gleda kliknute indexe
 
@@ -70,27 +87,28 @@
       "Points: " + points);
 
     //nasao na netu neku funkciju koja random poslozi brojeve
-    function shuffle(numbers) {
-      numbers.sort(() => Math.random() - 0.5);
+    function shuffle(pictures) {
+      pictures.sort(() => Math.random() - 0.5);
     }
-    shuffle(numbers);
+    shuffle(pictures);
 
     //random poslozene brojeve sprema u 4 polja
     for (var i = 0; i < 4; i++) {
       for (var j = 0; j < 4; j++) {
-        memo[i][j] = numbers[k];
+        memo[i][j] = pictures[k];
         k++;
       }
     }
 
     for (let i = 0; i < kocke.length; i++) {
       kocke[i].addEventListener("click", function () {
-        kocke[i].innerHTML = memo[Math.floor(i / 4)][i % 4];
+        kocke[i].style.backgroundImage = "url("+memo[Math.floor(i / 4)][i % 4]+")";
+        //kocke[i].innerHTML = memo[Math.floor(i / 4)][i % 4];
 
         //ako brojevi nisu jednaki ne ostavlja ih otkrivene nego ih skriva
         if (jednaki == -1) {
-          kocke[firstIndex].innerHTML = " ";
-          kocke[secondIndex].innerHTML = " ";
+          kocke[firstIndex].style.background = 'none';
+          kocke[secondIndex].style.background = 'none';
           firstIndex = -1;
           secondIndex = -1;
         }
@@ -109,7 +127,6 @@
           // clicked[clickedIndex2] = 1;
           second = memo[Math.floor(i / 4)][i % 4];
         }
-
 
         //NE RADI
         //provjerava jel to mjesto vec pogodeno, ako je izlazi van iz funkcije
